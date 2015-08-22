@@ -7,7 +7,7 @@ request('http://stackoverflow.com/feeds/featured', function (error, response, bo
   if (!error && response.statusCode == 200) {
     //console.log(body) 
     var parser;
-	parser = new xml2js.Parser({ignoreAttrs: true});
+	parser = new xml2js.Parser({ignoreAttrs: false});
 	parser.parseString(body, function (err, result) {
 
 		postEntries = result['feed']['entry'];
@@ -15,7 +15,34 @@ request('http://stackoverflow.com/feeds/featured', function (error, response, bo
 
 			async.each(postEntries, function(entry, callback) {
 
-			  console.log(entry['title'][0]);
+			  // parse main part of post
+			  console.log(entry['id'][0]);
+			  console.log(entry['title'][0]._);
+			  console.log(entry['link'][0].$.href);
+			  console.log(entry['published'][0]);
+			  console.log(entry['author'][0]['name'][0]);
+			  console.log(entry['author'][0]['uri'][0]);
+
+			  // parse tags (there can only ever be 5 so we just check them all)
+			  if (typeof(entry['category'][0]) != "undefined") {
+				console.log(entry['category'][0].$.term);
+			  }
+			  if (typeof(entry['category'][1]) != "undefined") {
+				console.log(entry['category'][1].$.term);
+			  }
+			  if (typeof(entry['category'][2]) != "undefined") {
+				console.log(entry['category'][2].$.term);
+			  }
+			  if (typeof(entry['category'][3]) != "undefined") {
+				console.log(entry['category'][3].$.term);
+			  }
+			  if (typeof(entry['category'][4]) != "undefined") {
+				console.log(entry['category'][4].$.term);
+			  }
+
+
+
+			  console.log('');
 
 
 			  callback();
